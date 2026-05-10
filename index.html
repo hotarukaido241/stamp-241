@@ -79,8 +79,6 @@
   <div id="progress" class="progress"></div>
   <div id="complete" class="complete"></div>
 
-  <button onclick="resetData()">リセット</button>
-
   <script>
     const stamps = [
       { id:1, name:"🌳 森" },
@@ -119,10 +117,6 @@
         "🎉 COMPLETE！宝を発見！";
     }
 
-    function resetData(){
-      localStorage.clear();
-      location.href = location.pathname;
-    }
   </script>
 
 </body>
