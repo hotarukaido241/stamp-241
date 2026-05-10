@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NFCスタンプラリー</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family:sans-serif;
+      background:#f7f7f7;
+      text-align:center;
+      padding:30px;
+    }
+
+    h1{
+      margin-bottom:10px;
+    }
+
+    p{
+      color:#666;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:15px;
+      max-width:420px;
+      margin:30px auto;
+    }
+
+    .stamp{
+      background:white;
+      border-radius:15px;
+      padding:30px 10px;
+      box-shadow:0 4px 12px rgba(0,0,0,.08);
+      font-size:20px;
+      transition:.2s;
+    }
+
+    .got{
+      background:#ffe27a;
+      transform:scale(1.03);
+      font-weight:bold;
+    }
+
+    .progress{
+      font-size:22px;
+      margin-top:20px;
+      font-weight:bold;
+    }
+
+    .complete{
+      margin-top:20px;
+      font-size:28px;
+      color:#d97706;
+      font-weight:bold;
+    }
+
+    button{
+      margin-top:20px;
+      border:none;
+      background:#333;
+      color:white;
+      padding:10px 18px;
+      border-radius:999px;
+      cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🏆 NFCスタンプラリー</h1>
+  <p>NFCをタップしてスタンプを集めよう！</p>
+
+  <div id="grid" class="grid"></div>
+
+  <div id="progress" class="progress"></div>
+  <div id="complete" class="complete"></div>
+
+  <button onclick="resetData()">リセット</button>
+
+  <script>
+    const stamps = [
+      { id:1, name:"🌳 森" },
+      { id:2, name:"🏰 城" },
+      { id:3, name:"🌊 海" },
+      { id:4, name:"⛰ 山" }
+    ];
+
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id");
+
+    if(id){
+      localStorage.setItem("stamp_" + id, "1");
+    }
+
+    const grid = document.getElementById("grid");
+    let count = 0;
+
+    stamps.forEach(stamp => {
+      const got = localStorage.getItem("stamp_" + stamp.id);
+
+      if(got) count++;
+
+      const div = document.createElement("div");
+      div.className = got ? "stamp got" : "stamp";
+      div.textContent = got ? "✔ " + stamp.name : "❓ 未取得";
+
+      grid.appendChild(div);
+    });
+
+    document.getElementById("progress").textContent =
+      `${count} / ${stamps.length} 個GET`;
+
+    if(count === stamps.length){
+      document.getElementById("complete").textContent =
+        "🎉 COMPLETE！宝を発見！";
+    }
+
+    function resetData(){
+      localStorage.clear();
+      location.href = location.pathname;
+    }
+  </script>
+
+</body>
+</html>
